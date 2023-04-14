@@ -1,0 +1,59 @@
+<div>
+  <div>
+    <h1>
+      Quiz #<%= @the_quiz.id %> details
+    </h1>
+
+    <div>
+      <a href="/quizzes">
+        Go back
+      </a>
+    </div>
+
+    <dl>
+      <dt>
+        Topic
+      </dt>
+      <dd>
+        <%= @the_quiz.topic %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_quiz.created_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+<dl>
+  <% Message.where({ :quiz_id => @the_quiz.id }).order(:created_at).each do |message| %>
+    <dt><%= message.role %></dt>
+    <dd><%= simple_format(message.content) %></dd>
+  <% end %>
+
+  <dt>user</dt>
+  <dd>
+    <form action="/insert_message" method="post">
+      <input type="hidden" name="query_quiz_id" value="<%= @the_quiz.id %>">
+
+      <input type="hidden" id="role_box" name="query_role" value="user">
+
+      <div>
+        <label for="content_box" style="display: none">
+          Content
+        </label>
+
+        <textarea id="content_box" name="query_content" placeholder="Enter your response..." cols="80" rows="10"></textarea>
+      </div>
+
+      <button>
+        Add message
+      </button>
+    </form>
+  </dd>
+</dl>
